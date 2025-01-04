@@ -3,6 +3,7 @@ name: build and push images
 on:
   push:
     branches: ['master']
+  workflow_dispatch:  # Add this line to enable manual triggers
 
 jobs:
   build-and-push-image:
