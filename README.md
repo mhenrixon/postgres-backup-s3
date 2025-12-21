@@ -52,6 +52,16 @@ docker exec <container name> sh restore.sh
 docker exec <container name> sh restore.sh <timestamp>
 ```
 
+### ... from a different database name
+Use `SOURCE_DATABASE` to restore from a backup that was created with a different database name. This is useful for migrations, e.g., restoring a backup from database "cosmos" into database "coding":
+```sh
+docker exec -e SOURCE_DATABASE=cosmos <container name> sh restore.sh
+```
+Or with a specific timestamp:
+```sh
+docker exec -e SOURCE_DATABASE=cosmos <container name> sh restore.sh 2025-12-20T00:00:00
+```
+
 # Development
 ## Build the image locally
 `POSTGRES_VERSION` determines Postgres version.
@@ -85,3 +95,4 @@ These changes would have been difficult or impossible merge into @schickling's r
   - support encrypted (password-protected) backups
   - support for restoring from a specific backup by timestamp
   - support for auto-removal of old backups
+  - support for restoring from a backup with a different database name (`SOURCE_DATABASE`)
