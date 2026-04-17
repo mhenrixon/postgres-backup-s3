@@ -11,6 +11,9 @@ apk add postgresql-client
 # install gpg
 apk add gnupg
 
+# parallel compression for streaming backups
+apk add zstd
+
 apk add aws-cli
 
 # install go-cron
