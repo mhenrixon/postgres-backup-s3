@@ -17,6 +17,7 @@ services:
       SCHEDULE: '@weekly'     # optional
       BACKUP_KEEP_DAYS: 7     # optional
       PASSPHRASE: passphrase  # optional
+      JOBS: 4                 # optional, parallel pg_dump/pg_restore jobs (default: nproc)
       S3_REGION: region
       S3_ACCESS_KEY_ID: key
       S3_SECRET_ACCESS_KEY: secret
@@ -87,7 +88,9 @@ These changes would have been difficult or impossible merge into @schickling's r
 
 ## Other changes and features
   - some environment variables renamed or removed
-  - uses `pg_dump`'s `custom` format (see [docs](https://www.postgresql.org/docs/10/app-pgdump.html))
+  - parallel `pg_dump --format=directory` + `pg_restore --jobs` for faster backup/restore on multi-table databases
+  - streaming pipeline: dump → `zstd -T0` → (optional `gpg`) → S3 with no intermediate artifact on disk
+  - backups stored as `<db>_<timestamp>.tar.zst` (or `.tar.zst.gpg` when encrypted); legacy `.dump` / `.dump.gpg` backups are still restorable
   - drop and re-create all database objects on restore
   - backup blobs and all schemas by default
   - no Python 2 dependencies
