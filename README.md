@@ -18,6 +18,7 @@ services:
       BACKUP_KEEP_DAYS: 7     # optional
       PASSPHRASE: passphrase  # optional
       JOBS: 4                 # optional, parallel pg_dump/pg_restore jobs (default: nproc)
+      ZSTD_LEVEL: 3           # optional, zstd compression level 1-22 (default: 3)
       S3_REGION: region
       S3_ACCESS_KEY_ID: key
       S3_SECRET_ACCESS_KEY: secret
