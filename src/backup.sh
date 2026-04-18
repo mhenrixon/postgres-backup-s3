@@ -6,6 +6,7 @@ set -o pipefail
 source ./env.sh
 
 jobs="${JOBS:-$(nproc)}"
+zstd_level="${ZSTD_LEVEL:-3}"
 dump_dir="$(mktemp -d)"
 trap 'rm -rf "$dump_dir"' EXIT
 
@@ -27,14 +28,14 @@ if [ -n "$PASSPHRASE" ]; then
   s3_uri="${s3_uri_base}.gpg"
   echo "Streaming encrypted backup to $s3_uri..."
   tar -cf - -C "$dump_dir" . \
-    | zstd -T0 -3 \
+    | zstd -T0 "-${zstd_level}" \
     | gpg --symmetric --batch --passphrase "$PASSPHRASE" \
     | aws $aws_args s3 cp - "$s3_uri"
 else
   s3_uri="$s3_uri_base"
   echo "Streaming backup to $s3_uri..."
   tar -cf - -C "$dump_dir" . \
-    | zstd -T0 -3 \
+    | zstd -T0 "-${zstd_level}" \
     | aws $aws_args s3 cp - "$s3_uri"
 fi
 
